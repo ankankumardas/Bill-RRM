@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<meta charset="UTF-8">
+	<style>
+	body {
+		color: black;
+	}
+	.data_entry {
+		width: 90%;
+		margin: auto;
+		text-align: center;
+	}
+	.data_entry table td {
+		padding: 10px;
+	}
+	.data_entry table td input {
+		margin: 0;
+		width: 90%;
+	}
+	.print_content {
+		width: 10.5cm;
+		height: 14cm;
+		border: 1px solid black;
+		font-size: 11px;
+		display: none;
+	}
+	.section_1 {
+		width: 10.3cm;
+		height: 3.3cm;
+		margin: 0.1cm auto 0.1cm auto;
+	}
+	.section_1_1 {
+		width: 100%;
+		text-align: center;
+	}
+	.section_1_2 tr td:nth-child(2), .section_1_2 tr td:nth-child(4) {
+		border-bottom: 1px dotted;
+	}
+	.section_1_2 tr td + td + td {
+		text-align: right;
+	}
+	.section_2 {
+		width: 10.3cm;
+		height: 8.4cm;
+		margin: 0.1cm auto 0 auto;
+	}
+	.section_2 table {
+		height: 100%;
+		table-layout: fixed;
+	}
+	.section_2 table tr {
+		text-align: center;
+		height: 0.5cm;
+	}
+	.section_2 table tr th {
+		border-top: 1px solid black;
+		border-bottom: 1px solid black;
+		border-right: 1px solid black;
+	}
+	.section_2 table tr td {
+		border-right: 1px solid black;
+	}
+	.section_2 table tr td:first-child, .section_2 table tr th:first-child {
+		border-left: 1px solid black;
+	}
+	.section_3 {
+		margin: 1cm auto 0 auto;
+		width: 10.3cm;
+	}
+	.section_3 table {
+		width: 95%;
+		margin: auto;
+	}
+	.section_3 table span {
+		border-top: 1px dotted;
+	}
+	#action_button {
+		margin: 10px auto;
+	}
+	</style>
+	<title>Bill RRM</title>
+	<body>
+		<div class="print_content">
+			<div class="section_1">
+				<table cellspacing="0" class="section_1_1">
+					<tr>
+						<td style="width: 33%; text-align: left; font-size: 10px;">GST : 20AAECR5776M1Z1</td>
+						<td style="width: 33%;">FARMER PADDY</td>
+						<td rowspan="2" style="width: 33%; text-align: right;">Mob : 8210622847<br/>7004310634</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><u>Purchase Memo</u></td>
+					</tr>
+					<tr>
+						<td colspan="3" style="font-size: 16px;">M/S RAMESWARA RICE MILL PVT. LTD.</td>
+					</tr>
+					<tr>
+						<td colspan="3">Saharpura, Jamtara - 815351 (Jharkhand)</td>
+					</tr>
+				</table>
+				<table cellspacing="0" class="section_1_2">
+					<tr>
+						<td style="width: 1.2cm;">No.</td>
+						<td style="width: 6.9cm;"></td>
+						<td style="width: 1.2cm;">Date :</td>
+						<td style="width: 1.5cm;" id="curr_date">13/12/2020</td>
+					</tr>
+					<tr>
+						<td>Name :</td>
+						<td id="seller_name"></td>
+						<td>Time :</td>
+						<td id="curr_time">03:13 AM</td>
+					</tr>
+					<tr>
+						<td>Address :</td>
+						<td id="seller_address"></td>
+						<td>Mobile :</td>
+						<td id="seller_mob"></td>
+					</tr>
+				</table>
+			</div>
+			<div class="section_2">
+				<table cellspacing="0">
+					<tr>
+						<th style="width: 1cm;">Qty.</th>
+						<th style="width: 4cm;">Description</th>
+						<th style="width: 1.8cm;">Weight</th>
+						<th style="width: 1.7cm;">Rate</th>
+						<th style="width: 2.3cm;">Amount</th>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr id="print_K">
+						<td></td>
+						<td style="font-size: 14px;">K</td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr id="print_E">
+						<td></td>
+						<td style="font-size: 14px;">E</td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr id="print_C">
+						<td></td>
+						<td style="font-size: 14px;">C</td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr id="print_deduct">
+					</tr>
+					<tr style="height: inherit;">
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr id="print_total">
+						<th colspan="3">Vehicle No.</th>
+						<th>Total</th>
+						<th></th>
+					</tr>
+				</table>
+			</div>
+			<div class="section_3">
+				<table cellspacing="0">
+					<tr>
+						<td style="width: 40%; text-align: center;"><span>Signature of Seller</span></td>
+						<td style="width: 60%; text-align: right;"><span>For Rameswara Rice Mill Pvt. Ltd.</span></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="data_entry">
+			<h2 style="text-align: center;"><u>Bill RRM</u></h2>
+			<input type="number" placeholder="Item Count" id="item_count" />
+			<div style="display: none;">
+				<table style="margin: auto;">
+					<tr>
+						<td>Total Quantity :</td>
+						<td><input type="number" placeholder="Total Quantity" id="total_quantity" /></td>
+						<td>Total Weight :</td>
+						<td><input type="number" placeholder="Total Weight" id="total_weight" /></td>
+					</tr>
+					<tr>
+						<td>Memo No :</td>
+						<td><input type="text" placeholder="Memo No." id="memo_no" /></td>
+						<td>Vehicle No :</td>
+						<td><input type="text" placeholder="Vehicle No" id="vehicle_no" /></td>
+					</tr>
+					<tr>
+						<td>Name :</td>
+						<td colspan="3"><input type="text" placeholder="Name" id="name" /></td>
+					</tr>
+					<tr>
+						<td>Address :</td>
+						<td colspan="3"><input type="text" placeholder="Address" id="address" /></td>
+					</tr>
+					<tr>
+						<td>Mobile No :</td>
+						<td colspan="3"><input type="text" placeholder="Mobile No" id="mobile" /></td>
+					</tr>
+					<tr>
+						<td>Threshold Moist. :</td>
+						<td><input type="number" placeholder="Threshold Moisture" id="thresh_moist" value="0" /></td>
+						<td>K :</td>
+						<td><input type="number" placeholder="K" id="deduct_k" value="0" /></td>
+					</tr>
+				</table>
+				<table style="margin: 20px auto;" cellspacing="0" cellpadding="5px" border="1">
+					<tr id="item_0">
+						<th width="15%">Quantity</th>
+						<th width="50%">Description</th>
+						<th width="10%">Moisture</th>
+						<th width="25%">Rate</th>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div id="action_button" style="text-align: center;">
+			<input type="button" value="Submit" onclick="create_table()" />
+		</div>
+	</body>
+</html>
+<script>
+	function create_table() {
+		// collect inputs
+		item_count = $("#item_count").val();
+		// ensure everything is entered
+		if(item_count) {
+			// remove temp row
+			$("#item_count").remove();
+			// insert new rows
+			for(var i = 1; i <= item_count; i++) {
+				var row = '<tr id="item_' + i + '"><td><input type="number" /></td><td><input type="text" /></td><td><input type="number" /></td><td><input type="number" /></td></tr>';
+				$("#item_" + (i - 1)).after(row);
+			}
+			// change action button
+			$("#action_button input").val("Calculate");
+			$("#action_button input").attr("onclick", "calculate_cost()");
+			// display other fields
+			$(".data_entry div:eq(0)").toggle()
+		}
+	}
+	function calculate_cost() {
+		// ensure necessary is entered
+		var flag = true;
+		var total_quantity = $("#total_quantity").val();
+		var total_weight = $("#total_weight").val();
+		if(!(total_quantity && total_weight))
+			flag = false;
+		for(var i = 1; i <= item_count && flag; i++) {
+			var row_id = "#item_" + i;
+			var quantity = $(row_id + " td:eq(0) input").val();
+			var desc = $(row_id + " td:eq(1) input").val();
+			var moist = $(row_id + " td:eq(2) input").val();
+			var rate = $(row_id + " td:eq(3) input").val();
+			if(!(quantity && desc && moist && rate))
+				flag = false;
+		}
+		if(!flag) {
+			alert("please fill up all blank cells");
+			return;
+		}
+		// display print content and fill entries
+		$(".print_content").toggle();
+		var d = new Date();
+		var date = d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
+		var hour = d.getHours();
+		var time_suffix = "AM";
+		if(hour >= 12)
+			time_suffix = "PM";
+		hour = (hour % 12 == 0)? 12: (hour % 12);
+		var time = hour + ":" + d.getMinutes() + " " + time_suffix;
+		$(".section_1_2 tr:eq(0) td:eq(1)").html($("#memo_no").val());
+		$("#curr_date").html(date);
+		$("#seller_name").html($("#name").val());
+		$("#curr_time").html(time);
+		$("#seller_address").html($("#address").val());
+		$("#seller_mob").html($("#mobile").val());
+		// calculate cost for all items
+		var total_amount = 0;
+		var claim = 0;
+		var total_weight = Number($("#total_weight").val());
+		var total_quantity = $("#total_quantity").val();
+		var thresh_moist = $("#thresh_moist").val();
+		var K = Number($("#deduct_k").val());
+		var E = total_weight * 5;
+		for(var i = 1; i <= item_count; i++) {
+			var row_data = "#item_" + i;
+			var prev_row = ".section_2 table tr:eq(" + (i - 1) + ")";
+			// collect inputs
+			var quantity = $(row_data + " td:eq(0) input").val();
+			var desc = $(row_data + " td:eq(1) input").val();
+			var moist = $(row_data + " td:eq(2) input").val();
+			var rate = $(row_data + " td:eq(3) input").val();
+			// calculate other fields
+			var weight = (total_weight / total_quantity) * quantity;
+			var amount = weight * rate;
+			total_amount += amount;
+			var extra_moist = (moist > thresh_moist)? (moist - thresh_moist): (0);
+			claim += (weight * rate * extra_moist) / 100;
+			// display data
+			var row = '<tr><td>' + quantity + '</td><td>' + desc + '</td><td>' + weight.toFixed(3) + '</td><td>' + rate + '</td><td>' + amount.toFixed(2) + '</td></tr>';
+			$(prev_row).after(row);
+		}
+		// display total till now
+		var prev_row = ".section_2 table tr:eq(" + item_count + ")";
+		var row = '<tr><th>' + total_quantity + '</th><td></td><th>' + total_weight.toFixed(3) + '</th><td></td><th>' + total_amount.toFixed(2) + '</th></tr>';
+		$(prev_row).after(row);
+		// display K, E, C
+		$("#print_K td:eq(4)").html(K.toFixed(2));
+		$("#print_E td:eq(4)").html(E.toFixed(2));
+		$("#print_C td:eq(4)").html(claim.toFixed(2));
+		var total_deduct = K + E + claim;
+		$("#print_deduct").html("<td></td><td></td><td></td><td></td><th>" + total_deduct.toFixed(2) + "</th>");
+		// display final amount
+		var final_amount = total_amount - total_deduct;
+		$("#print_total th:eq(0)").html("Vehicle No. : " + $("#vehicle_no").val());
+		$("#print_total th:eq(2)").html(final_amount.toFixed(2));
+		// hide data entry content
+		$(".data_entry").toggle();
+		// change action button
+		$("#action_button input").val("Print Page");
+		$("#action_button input").attr("onclick", "print_page()");
+	}
+	function print_page() {
+		// hide action button
+		$("#action_button").toggle();
+		// print page
+		window.print();
+		// show action button
+		$("#action_button").toggle();
+	}
+</script>
