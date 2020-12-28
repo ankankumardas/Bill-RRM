@@ -259,7 +259,8 @@
 		var flag = true;
 		var total_quantity = $("#total_quantity").val();
 		var total_weight = $("#total_weight").val();
-		if(!(total_quantity && total_weight))
+		var K = Number($("#deduct_k").val());
+		if(!(total_quantity && total_weight && K))
 			flag = false;
 		for(var i = 1; i <= item_count && flag; i++) {
 			var row_id = "#item_" + i;
@@ -270,8 +271,9 @@
 			if(!(quantity && desc && moist && rate))
 				flag = false;
 		}
+		flag = flag & confirm("Your K value is " + K + ". Are you sure?");
 		if(!flag) {
-			alert("please fill up all blank cells");
+			alert("please fill up all necessary cells properly");
 			return;
 		}
 		// display print content and fill entries
@@ -296,10 +298,10 @@
 		var total_weight = Number($("#total_weight").val());
 		var total_quantity = $("#total_quantity").val();
 		var thresh_moist = $("#thresh_moist").val();
-		var K = Number($("#deduct_k").val());
 		var E = total_weight * 5;
 		var quantity_sum = 0;
 		var weight_sum = 0;
+		var avg_weight = total_weight / total_quantity;
 		for(var i = 1; i <= item_count; i++) {
 			var row_data = "#item_" + i;
 			var prev_row = ".section_2 table tr:eq(" + (i - 1) + ")";
@@ -309,7 +311,10 @@
 			var moist = $(row_data + " td:eq(2) input").val();
 			var rate = $(row_data + " td:eq(3) input").val();
 			// calculate other fields
-			var weight = (total_weight / total_quantity) * quantity;
+			if(i < item_count)
+				var weight = Math.floor(avg_weight * quantity * 100) / 100;
+			else
+				var weight = Number(total_weight.toFixed(2)) - Number(weight_sum.toFixed(2));
 			quantity_sum += Number(quantity);
 			weight_sum += weight;
 			var amount = weight * rate;
@@ -317,12 +322,12 @@
 			var extra_moist = (moist > thresh_moist)? (moist - thresh_moist): (0);
 			claim += (weight * rate * extra_moist) / 100;
 			// display data
-			var row = '<tr><td>' + quantity + '</td><td>' + desc + '</td><td>' + weight.toFixed(3) + '</td><td>' + rate + '</td><td>' + amount.toFixed(2) + '</td></tr>';
+			var row = '<tr><td>' + quantity + '</td><td>' + desc + '</td><td>' + weight.toFixed(2) + '</td><td>' + rate + '</td><td>' + amount.toFixed(2) + '</td></tr>';
 			$(prev_row).after(row);
 		}
 		// display total till now
 		var prev_row = ".section_2 table tr:eq(" + item_count + ")";
-		var row = '<tr><th>' + quantity_sum + '</th><td></td><th>' + weight_sum.toFixed(3) + '</th><td></td><th>' + total_amount.toFixed(2) + '</th></tr>';
+		var row = '<tr><th>' + quantity_sum + '</th><td></td><th>' + weight_sum.toFixed(2) + '</th><td></td><th>' + total_amount.toFixed(2) + '</th></tr>';
 		$(prev_row).after(row);
 		// display K, E, C
 		$("#print_K td:eq(4)").html(K.toFixed(2));
