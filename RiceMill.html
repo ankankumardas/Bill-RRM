@@ -322,12 +322,14 @@
 			var extra_moist = (moist > thresh_moist)? (moist - thresh_moist): (0);
 			claim += (weight * rate * extra_moist) / 100;
 			// display data
-			var row = '<tr><td>' + quantity + '</td><td>' + desc + '</td><td>' + weight.toFixed(2) + '</td><td>' + rate + '</td><td>' + amount.toFixed(2) + '</td></tr>';
+			var row = '<tr><td>' + quantity + '</td><td>' + desc + ' (' + moist + '%)</td><td>' + weight.toFixed(2) + '</td><td>' + rate + '</td><td>' + amount.toFixed(2) + '</td></tr>';
 			$(prev_row).after(row);
 		}
 		// display total till now
 		var prev_row = ".section_2 table tr:eq(" + item_count + ")";
 		var row = '<tr><th>' + quantity_sum + '</th><td></td><th>' + weight_sum.toFixed(2) + '</th><td></td><th>' + total_amount.toFixed(2) + '</th></tr>';
+		row += '<tr><td>' + total_quantity + '</td><td></td><td></td><td></td><td></td></tr>';
+		row += '<tr><th>' + thresh_moist + '%</th><td></td><td></td><td></td><td></td></tr>';
 		$(prev_row).after(row);
 		// display K, E, C
 		$("#print_K td:eq(4)").html(K.toFixed(2));
