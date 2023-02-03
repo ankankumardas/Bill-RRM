@@ -296,9 +296,9 @@
 		var total_amount = 0;
 		var claim = 0;
 		var total_weight = Number($("#total_weight").val());
-		var total_quantity = $("#total_quantity").val();
-		var thresh_moist = $("#thresh_moist").val();
-		var E = total_weight * 5;
+		var total_quantity = Number($("#total_quantity").val());
+		var thresh_moist = Number($("#thresh_moist").val());
+		var E = total_weight * 6;
 		var quantity_sum = 0;
 		var weight_sum = 0;
 		var avg_weight = total_weight / total_quantity;
@@ -306,16 +306,16 @@
 			var row_data = "#item_" + i;
 			var prev_row = ".section_2 table tr:eq(" + (i - 1) + ")";
 			// collect inputs
-			var quantity = $(row_data + " td:eq(0) input").val();
+			var quantity = Number($(row_data + " td:eq(0) input").val());
 			var desc = $(row_data + " td:eq(1) input").val();
-			var moist = $(row_data + " td:eq(2) input").val();
-			var rate = $(row_data + " td:eq(3) input").val();
+			var moist = Number($(row_data + " td:eq(2) input").val());
+			var rate = Number($(row_data + " td:eq(3) input").val());
 			// calculate other fields
 			if(i < item_count)
 				var weight = Math.floor(avg_weight * quantity * 100) / 100;
 			else
 				var weight = Number(total_weight.toFixed(2)) - Number(weight_sum.toFixed(2));
-			quantity_sum += Number(quantity);
+			quantity_sum += quantity;
 			weight_sum += weight;
 			var amount = weight * rate;
 			total_amount += amount;
