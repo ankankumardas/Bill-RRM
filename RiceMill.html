@@ -231,6 +231,7 @@
 		</div>
 		<div id="action_button" style="text-align: center;">
 			<input type="button" value="Submit" onclick="create_table()" />
+			<a></a>
 		</div>
 	</body>
 </html>
@@ -251,7 +252,7 @@
 			$("#action_button input").val("Calculate");
 			$("#action_button input").attr("onclick", "calculate_cost()");
 			// display other fields
-			$(".data_entry div:eq(0)").toggle()
+			$(".data_entry div:eq(0)").toggle();
 		}
 	}
 	function calculate_cost() {
@@ -292,6 +293,9 @@
 		$("#curr_time").html(time);
 		$("#seller_address").html($("#address").val());
 		$("#seller_mob").html($("#mobile").val());
+		// initialize csv full text with header and first row
+		var csv_full_text = "Memo No,Date,Time,Party Name,Item Name,Item Quantity,Item Weight,Item Rate,Item Amount,K,E,C,Claim Amount,Total Amount,Bill Amount\n".toUpperCase();
+		csv_full_text += $("#memo_no").val()+ "," + date + "," + time + "," + $("#name").val() + ",,,,,,,,,,,\n";
 		// calculate cost for all items
 		var total_amount = 0;
 		var claim = 0;
@@ -324,6 +328,8 @@
 			// display data
 			var row = '<tr><td>' + quantity + '</td><td>' + desc + ' (' + moist + '%)</td><td>' + weight.toFixed(2) + '</td><td>' + rate + '</td><td>' + amount.toFixed(2) + '</td></tr>';
 			$(prev_row).after(row);
+			// store details for csv downloading
+			csv_full_text += ",,,," + desc + "," + quantity + "," + weight.toFixed(2) + "," + rate + "," + amount.toFixed(2) + ",,,,,,\n";
 		}
 		// display total till now
 		var prev_row = ".section_2 table tr:eq(" + item_count + ")";
@@ -341,11 +347,18 @@
 		var final_amount = total_amount - total_deduct;
 		$("#print_total th:eq(0)").html("Vehicle No. : " + $("#vehicle_no").val());
 		$("#print_total th:eq(2)").html(final_amount.toFixed(2));
+		// add last row of the csv file
+		csv_full_text += ",,,,,,,,," + K.toFixed(2) + "," + E.toFixed(2) + "," + claim.toFixed(2) + "," + total_deduct.toFixed(2) + "," + total_amount.toFixed(2) + "," + final_amount.toFixed(2) + "\n";
 		// hide data entry content
 		$(".data_entry").toggle();
 		// change action button
 		$("#action_button input").val("Print Page");
 		$("#action_button input").attr("onclick", "print_page()");
+		// create link for downloading as csv
+		var element = "#action_button a";
+		$(element).attr("href", "data:text/plain;charset=utf-8," + encodeURIComponent(csv_full_text));
+		$(element).attr("download", $("#memo_no").val() + ".csv");
+		$(element).html("Download CSV");
 	}
 	function print_page() {
 		// hide action button
